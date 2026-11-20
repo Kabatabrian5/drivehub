@@ -1,0 +1,805 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b0f">
+  <meta name="description" content="DRIVE HUB CEO Control Room - Manage dealers, vehicles, subscriptions and payments.">
+  <title>DRIVE HUB | CEO Control Room</title>
+
+  <link rel="stylesheet" href="admin.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">DRIVE <span>HUB</span></div>
+
+  <p class="side-label">CEO CONTROL ROOM</p>
+
+  <nav>
+    <button type="button" class="nav-item active" data-page="overview">▦ Overview</button>
+    <button type="button" class="nav-item" data-page="dealers">♙ Dealers</button>
+    <button type="button" class="nav-item" data-page="vehicles">🚘 Vehicle Listings</button>
+    <button type="button" class="nav-item" data-page="fees">♢ Fees & Subscriptions</button>
+    <button type="button" class="nav-item" data-page="payments">▤ Payments & Receipts</button>
+    <button type="button" class="nav-item" data-page="bookings">◷ Viewing Bookings</button>
+    <button type="button" class="nav-item" data-page="assistant">✧ Admin Assistant</button>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <span>DRIVE HUB MANAGEMENT</span>
+    <span>Kenya's Trusted Car Marketplace</span>
+  </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <button type="button" class="menu-toggle" id="menuToggle">☰</button>
+
+      <div>
+        <p class="eyebrow">DRIVE HUB MANAGEMENT</p>
+        <h1 id="pageTitle">Overview</h1>
+      </div>
+
+    </div>
+
+    <div class="admin-profile">
+      <div class="admin-avatar">CEO</div>
+
+      <div>
+        <strong>Administrator</strong>
+        <small>Control Room</small>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- ======================================
+       OVERVIEW
+  ======================================= -->
+  <section class="page active" id="overviewPage">
+
+    <div class="welcome">
+
+      <div>
+        <p class="eyebrow">EXECUTIVE DASHBOARD</p>
+        <h2>Welcome to DRIVE HUB.</h2>
+        <p>Monitor your marketplace operations from one place.</p>
+      </div>
+
+      <span class="live-label">● MANAGEMENT PANEL</span>
+
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <span>Total Dealers</span>
+        <strong id="totalDealers">0</strong>
+        <small>Registered dealers</small>
+      </div>
+
+      <div class="stat-card">
+        <span>Approved Vehicles</span>
+        <strong id="totalVehicles">0</strong>
+        <small>Published listings</small>
+      </div>
+
+      <div class="stat-card">
+        <span>Pending Approvals</span>
+        <strong id="pendingApprovals">0</strong>
+        <small>Dealers and vehicles</small>
+      </div>
+
+      <div class="stat-card">
+        <span>Viewing Requests</span>
+        <strong id="totalBookings">0</strong>
+        <small>Customer bookings</small>
+      </div>
+
+      <div class="stat-card">
+        <span>Total Revenue</span>
+        <strong id="dashboardRevenue">KSh 0</strong>
+        <small>Recorded payments</small>
+      </div>
+
+      <div class="stat-card">
+        <span>Active Subscriptions</span>
+        <strong id="activeSubscriptions">0</strong>
+        <small>Dealer subscriptions</small>
+      </div>
+
+      <div class="stat-card">
+        <span>New Dealers</span>
+        <strong id="newDealerCount">0</strong>
+        <small>Awaiting approval</small>
+      </div>
+
+      <div class="stat-card">
+        <span>Pending Vehicles</span>
+        <strong id="pendingVehicleCount">0</strong>
+        <small>Awaiting approval</small>
+      </div>
+
+    </div>
+
+    <div class="dashboard-grid">
+
+      <div class="panel">
+
+        <div class="panel-heading">
+          <h3>Recently Registered Dealers</h3>
+          <button type="button" class="text-btn" data-goto="dealers">View all</button>
+        </div>
+
+        <div class="data-list" id="recentDealers"></div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-heading">
+          <h3>Vehicles Awaiting Approval</h3>
+          <button type="button" class="text-btn" data-goto="vehicles">View all</button>
+        </div>
+
+        <div class="data-list" id="recentVehicles"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================
+       DEALERS
+  ======================================= -->
+  <section class="page" id="dealersPage">
+
+    <div class="page-intro">
+
+      <div>
+        <p class="eyebrow">DEALER MANAGEMENT</p>
+        <h2>Manage Dealers</h2>
+        <p>Review registrations and manage dealer accounts.</p>
+      </div>
+
+    </div>
+
+    <div class="stats-grid compact-stats">
+
+      <div class="stat-card">
+        <span>All Dealers</span>
+        <strong id="allDealerCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Approved</span>
+        <strong id="approvedDealerCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Pending</span>
+        <strong id="pendingDealerCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Rejected</span>
+        <strong id="rejectedDealerCount">0</strong>
+      </div>
+
+    </div>
+
+    <div class="filter-row">
+
+      <input
+        type="search"
+        id="dealerSearch"
+        placeholder="Search dealer name, email or phone"
+      >
+
+      <select id="dealerFilter">
+        <option value="all">All dealers</option>
+        <option value="pending">New / Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
+    </div>
+
+    <div class="panel table-panel">
+
+      <div class="table-scroll">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Dealer</th>
+              <th>Contact</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="dealersTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================
+       VEHICLES
+  ======================================= -->
+  <section class="page" id="vehiclesPage">
+
+    <div class="page-intro">
+
+      <div>
+        <p class="eyebrow">VEHICLE MANAGEMENT</p>
+        <h2>Vehicle Listings</h2>
+        <p>Manage dealer submissions and add vehicles directly.</p>
+      </div>
+
+      <button type="button" class="primary-btn" id="addCarBtn">
+        + Add Vehicle
+      </button>
+
+    </div>
+
+    <div class="filter-row">
+
+      <input
+        type="search"
+        id="vehicleSearch"
+        placeholder="Search make, model or dealer"
+      >
+
+      <select id="vehicleFilter">
+        <option value="all">All vehicles</option>
+        <option value="pending">Awaiting approval</option>
+        <option value="approved">Approved</option>
+        <option value="available">Available</option>
+        <option value="rejected">Rejected</option>
+        <option value="sold">Sold</option>
+      </select>
+
+    </div>
+
+    <div class="vehicle-admin-grid" id="vehicleList"></div>
+
+  </section>
+
+  <!-- ======================================
+       FEES AND SUBSCRIPTIONS
+  ======================================= -->
+  <section class="page" id="feesPage">
+
+    <div class="page-intro">
+
+      <div>
+        <p class="eyebrow">BUSINESS CONFIGURATION</p>
+        <h2>Fees & Subscriptions</h2>
+        <p>Configure what dealers pay to use DRIVE HUB.</p>
+      </div>
+
+    </div>
+
+    <div class="fee-grid">
+
+      <div class="panel fee-card">
+
+        <span class="fee-icon">◇</span>
+
+        <h3>Vehicle Listing Fee</h3>
+
+        <p>Fee charged for listing a vehicle.</p>
+
+        <label for="listingFee">Listing fee (KSh)</label>
+
+        <input
+          type="number"
+          id="listingFee"
+          min="0"
+          placeholder="1000"
+        >
+
+      </div>
+
+      <div class="panel fee-card">
+
+        <span class="fee-icon">♧</span>
+
+        <h3>Monthly Subscription</h3>
+
+        <p>Monthly dealer subscription amount.</p>
+
+        <label for="monthlyFee">Monthly fee (KSh)</label>
+
+        <input
+          type="number"
+          id="monthlyFee"
+          min="0"
+          placeholder="5000"
+        >
+
+      </div>
+
+      <div class="panel fee-card">
+
+        <span class="fee-icon">◷</span>
+
+        <h3>Weekly Subscription</h3>
+
+        <p>Weekly dealer subscription amount.</p>
+
+        <label for="weeklyFee">Weekly fee (KSh)</label>
+
+        <input
+          type="number"
+          id="weeklyFee"
+          min="0"
+          placeholder="Enter weekly fee"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="panel payment-settings">
+
+      <h3>Payment Instructions</h3>
+
+      <label for="paybillNumber">M-Pesa Paybill / Till Number</label>
+
+      <input
+        id="paybillNumber"
+        placeholder="Enter business payment number"
+      >
+
+      <label for="paymentReference">Payment Reference</label>
+
+      <input
+        id="paymentReference"
+        placeholder="DRIVEHUB"
+      >
+
+      <label>Other accepted payment methods</label>
+
+      <p class="muted">
+        M-Pesa, Airtel Money, Cash, Visa and other methods can be
+        recorded by the administrator.
+      </p>
+
+      <button type="button" class="primary-btn full-btn" id="saveFees">
+        Save Settings
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================
+       PAYMENTS AND RECEIPTS
+  ======================================= -->
+  <section class="page" id="paymentsPage">
+
+    <div class="page-intro">
+
+      <div>
+        <p class="eyebrow">FINANCIAL MANAGEMENT</p>
+        <h2>Payments & Receipts</h2>
+        <p>Record dealer payments and generate receipts.</p>
+      </div>
+
+      <button type="button" class="primary-btn" id="addPaymentBtn">
+        + Record Payment
+      </button>
+
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <span>Payment Records</span>
+        <strong id="paymentCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Total Recorded Revenue</span>
+        <strong id="paymentTotal">KSh 0</strong>
+      </div>
+
+    </div>
+
+    <div class="panel table-panel">
+
+      <div class="table-scroll">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Dealer</th>
+              <th>Payment Type</th>
+              <th>Method</th>
+              <th>Amount</th>
+              <th>Reference</th>
+              <th>Receipt</th>
+            </tr>
+          </thead>
+
+          <tbody id="paymentsTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================
+       BOOKINGS
+  ======================================= -->
+  <section class="page" id="bookingsPage">
+
+    <div class="page-intro">
+
+      <div>
+        <p class="eyebrow">CUSTOMER MANAGEMENT</p>
+        <h2>Viewing Bookings</h2>
+        <p>Review requests from customers interested in viewing cars.</p>
+      </div>
+
+    </div>
+
+    <div class="panel table-panel">
+
+      <div class="table-scroll">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Vehicle</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Phone</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="bookingsTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ======================================
+       ADMIN ASSISTANT
+  ======================================= -->
+  <section class="page" id="assistantPage">
+
+    <div class="page-intro">
+
+      <div>
+        <p class="eyebrow">MANAGEMENT INTELLIGENCE</p>
+        <h2>DRIVE HUB Assistant</h2>
+        <p>Prepare receipts and organize vehicle information.</p>
+      </div>
+
+    </div>
+
+    <div class="assistant-grid">
+
+      <!-- VEHICLE EXTRACTOR -->
+      <div class="panel">
+
+        <h3>Vehicle Information Extractor</h3>
+
+        <p class="muted">
+          Paste a vehicle description. The assistant will identify
+          details for you to review.
+        </p>
+
+        <textarea
+          id="carDescription"
+          rows="7"
+          placeholder="Example: Toyota Axio, 2018 model, automatic transmission, petrol, KSh 1,250,000, located in Nairobi..."
+        ></textarea>
+
+        <button
+          type="button"
+          class="primary-btn full-btn"
+          id="extractCarBtn"
+        >
+          Extract Vehicle Details
+        </button>
+
+        <div id="extractedCar" class="extracted-box"></div>
+
+        <button
+          type="button"
+          class="primary-btn full-btn"
+          id="useExtractedCar"
+          hidden
+        >
+          Continue to Add Vehicle
+        </button>
+
+      </div>
+
+      <!-- RECEIPT ASSISTANT -->
+      <div class="panel">
+
+        <h3>Receipt Assistant</h3>
+
+        <p class="muted">
+          Find a recorded payment and prepare its receipt.
+        </p>
+
+        <select id="receiptPayment">
+          <option value="">No recorded payments</option>
+        </select>
+
+        <button
+          type="button"
+          class="primary-btn full-btn"
+          id="draftReceiptBtn"
+        >
+          Prepare Receipt
+        </button>
+
+        <div id="receiptPreview" class="receipt-preview"></div>
+
+      </div>
+
+    </div>
+
+    <!-- MANAGEMENT SUMMARY -->
+    <div class="panel assistant-notes">
+
+      <h3>Management Summary</h3>
+
+      <div id="assistantSummary"></div>
+
+      <button
+        type="button"
+        class="primary-btn full-btn"
+        id="refreshSummary"
+      >
+        Refresh Summary
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ======================================
+     ADD / EDIT VEHICLE MODAL
+====================================== -->
+<div class="modal" id="carModal">
+
+  <div class="modal-card wide-modal">
+
+    <button type="button" class="modal-close" id="closeCar">×</button>
+
+    <p class="eyebrow">VEHICLE INVENTORY</p>
+
+    <h2 id="carModalTitle">Add Vehicle</h2>
+
+    <form id="carForm">
+
+      <input type="hidden" id="carId">
+
+      <div class="form-grid">
+
+        <div>
+          <label for="carMake">Make</label>
+          <input id="carMake" required placeholder="Toyota">
+        </div>
+
+        <div>
+          <label for="carModel">Model</label>
+          <input id="carModel" required placeholder="Axio">
+        </div>
+
+        <div>
+          <label for="carYear">Year</label>
+          <input id="carYear" type="number" min="1900" required placeholder="2018">
+        </div>
+
+        <div>
+          <label for="carPrice">Price (KSh)</label>
+          <input id="carPrice" type="number" min="1" required>
+        </div>
+
+        <div>
+          <label for="carLocation">Location</label>
+          <input id="carLocation" required placeholder="Nairobi">
+        </div>
+
+        <div>
+          <label for="carTransmission">Transmission</label>
+          <select id="carTransmission">
+            <option>Automatic</option>
+            <option>Manual</option>
+            <option>CVT</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="carFuel">Fuel</label>
+          <select id="carFuel">
+            <option>Petrol</option>
+            <option>Diesel</option>
+            <option>Hybrid</option>
+            <option>Electric</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="carMileage">Mileage (km)</label>
+          <input id="carMileage" type="number" min="0">
+        </div>
+
+        <div>
+          <label for="carDealer">Dealer</label>
+          <select id="carDealer">
+            <option value="">Admin / Direct Listing</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="carStatus">Status</label>
+          <select id="carStatus">
+            <option value="approved">Available / Published</option>
+            <option value="pending">Pending</option>
+            <option value="sold">Sold</option>
+          </select>
+        </div>
+
+      </div>
+
+      <label for="carDescriptionInput">Additional details</label>
+
+      <textarea
+        id="carDescriptionInput"
+        rows="3"
+        placeholder="Vehicle condition, features and other details"
+      ></textarea>
+
+      <label for="carImages">Vehicle photographs (multiple allowed)</label>
+
+      <input
+        type="file"
+        id="carImages"
+        accept="image/*"
+        multiple
+      >
+
+      <p class="muted">
+        Images are stored in this browser. Large image collections
+        may exceed browser storage capacity.
+      </p>
+
+      <div id="carImagePreview" class="image-preview"></div>
+
+      <button class="primary-btn full-btn" type="submit">
+        Save Vehicle
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- ======================================
+     PAYMENT MODAL
+====================================== -->
+<div class="modal" id="paymentModal">
+
+  <div class="modal-card">
+
+    <button type="button" class="modal-close" id="closePayment">×</button>
+
+    <p class="eyebrow">FINANCIAL RECORD</p>
+
+    <h2>Record Dealer Payment</h2>
+
+    <form id="paymentForm">
+
+      <label for="paymentDealer">Dealer</label>
+
+      <select id="paymentDealer" required></select>
+
+      <label for="paymentType">Payment Type</label>
+
+      <select id="paymentType">
+        <option value="Listing Fee">Vehicle Listing Fee</option>
+        <option value="Weekly Subscription">Weekly Subscription</option>
+        <option value="Monthly Subscription">Monthly Subscription</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="paymentMethod">Payment Method</label>
+
+      <select id="paymentMethod">
+        <option>M-Pesa</option>
+        <option>Airtel Money</option>
+        <option>Cash</option>
+        <option>Visa</option>
+        <option>Bank Transfer</option>
+        <option>Other</option>
+      </select>
+
+      <label for="paymentAmount">Amount (KSh)</label>
+
+      <input
+        type="number"
+        id="paymentAmount"
+        min="1"
+        required
+      >
+
+      <label for="paymentRef">Transaction / Reference Number</label>
+
+      <input
+        id="paymentRef"
+        placeholder="Enter reference"
+      >
+
+      <label for="paymentDate">Payment Date</label>
+
+      <input
+        type="date"
+        id="paymentDate"
+        required
+      >
+
+      <button class="primary-btn full-btn" type="submit">
+        Save Payment & Prepare Receipt
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- TOAST MESSAGE -->
+<div class="toast" id="toast"></div>
+
+<!-- JAVASCRIPT -->
+<script src="admin.js"></script>
+
+</body>
+</html>

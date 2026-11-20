@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1b1d1f">
+    <meta name="description" content="DRIVE HUB Kenya - Discover vehicles from trusted car dealers across Kenya.">
+    <title>DRIVE HUB | Kenya's Trusted Car Marketplace</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+    <div class="header-inner">
+
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle"
+                type="button" aria-label="Open navigation menu"
+                aria-controls="sideMenu">☰</button>
+
+            <a href="#" class="brand" aria-label="DRIVE HUB homepage">
+                <img class="brand-logo" src="./pictures/Drivehub%20logo.jpg"
+                    alt="DRIVE HUB">
+            </a>
+        </div>
+
+        <nav class="desktop-navigation" aria-label="Main navigation">
+            <a href="#" class="active">⌂ Home</a>
+            <a href="#cars">Browse Cars</a>
+            <a href="#dealers">Dealers</a>
+            <a href="#about">About</a>
+            <a href="#customerCareModal" onclick="openCustomerCare()">Help</a>
+            <a href="#footer">Contact</a>
+        </nav>
+
+        <div class="header-right">
+            <button class="theme-toggle" id="themeToggle" type="button"
+                aria-label="Switch to dark theme" aria-pressed="false"
+                title="Switch to dark theme">
+                <span aria-hidden="true">☾</span>
+            </button>
+
+            <button class="header-notification" type="button"
+                onclick="openAccount()" aria-label="Notifications">
+                ♧
+                <span class="notification-count">3</span>
+            </button>
+
+            <button class="btn btn-secondary" id="headerAccountButton"
+                type="button" onclick="openAccount()">My Account</button>
+
+            <button class="profile-trigger" id="headerProfileTrigger"
+                type="button" onclick="openAccount()" aria-label="Open my profile">
+
+                <span class="profile-avatar" id="headerProfileAvatar">
+                    <span>👤</span>
+                </span>
+
+                <span class="profile-trigger-text">
+                    <strong id="headerProfileName">My Profile</strong>
+                    <small id="headerProfileStatus">Sign in</small>
+                </span>
+
+                <span class="profile-chevron">⌄</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div class="drawer-backdrop" id="drawerBackdrop"
+    onclick="closeMenu()"></div>
+
+<aside class="side-menu" id="sideMenu">
+
+    <div class="drawer-header">
+        <div class="brand">
+            <img class="brand-logo" src="./pictures/Drivehub%20logo.jpg"
+                alt="DRIVE HUB">
+        </div>
+
+        <button class="drawer-close" type="button"
+            onclick="closeMenu()" aria-label="Close menu">×</button>
+    </div>
+
+    <div class="drawer-user" id="drawerUser">
+        Welcome to DRIVE HUB
+    </div>
+
+    <nav aria-label="Main navigation">
+        <a href="#" onclick="closeMenu()">⌂ Home</a>
+        <a href="#cars" onclick="closeMenu()">🚘 Browse Cars</a>
+        <a href="#dealers" onclick="closeMenu()">🏢 Dealers</a>
+        <a href="#imports" onclick="closeMenu()">🌍 Vehicle Imports</a>
+
+        <a href="#" onclick="openAccount(); closeMenu()">👤 My Account</a>
+
+        <a href="#" onclick="openDealerAuth(); closeMenu()">
+            🏪 Dealer Registration
+        </a>
+
+        <a href="#" onclick="openDealerDashboard(); closeMenu()">
+            📊 Dealer Dashboard
+        </a>
+
+        <a href="#about" onclick="closeMenu()">ℹ About DRIVE HUB</a>
+
+        <a href="#" onclick="openCustomerCare(); closeMenu()">
+            🎧 Customer Care
+        </a>
+    </nav>
+
+    <div class="drawer-footer">
+        <p>DRIVE HUB KENYA</p>
+        <small>Discover. Compare. Connect.</small>
+    </div>
+
+</aside>
+
+<!-- =====================================================
+     HOMEPAGE HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <span class="hero-eyebrow">
+            Kenya's trusted car marketplace
+        </span>
+
+        <h1>
+            Find a car.
+            <span>Feel the difference.</span>
+        </h1>
+
+        <p>
+            Explore quality vehicles from trusted dealers across Kenya,
+            with straightforward details and a simpler way to connect.
+        </p>
+
+        <div class="hero-slogan">
+            Drive Your Dream with <strong>Drive Hub</strong>
+        </div>
+
+    </div>
+</section>
+
+<!-- =====================================================
+     VEHICLE SEARCH
+===================================================== -->
+
+<section class="search-section">
+    <div class="container">
+
+        <div class="search-panel">
+
+            <div class="search-row">
+
+                <input type="search" id="searchInput"
+                    placeholder="Search make, model or location..."
+                    aria-label="Search vehicles">
+
+                <button class="btn btn-primary" id="searchBtn"
+                    type="button">
+                    🔍 Search Cars
+                </button>
+
+            </div>
+
+            <div class="filter-grid">
+
+                <select id="makeFilter"
+                    aria-label="Filter by vehicle make">
+                    <option value="">All Makes</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="Mercedes-Benz">Mercedes-Benz</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Subaru">Subaru</option>
+                    <option value="Audi">Audi</option>
+                </select>
+
+                <select id="priceFilter"
+                    aria-label="Filter by maximum price">
+                    <option value="">Any Price</option>
+                    <option value="1000000">Under KSh 1M</option>
+                    <option value="3000000">Under KSh 3M</option>
+                    <option value="5000000">Under KSh 5M</option>
+                    <option value="10000000">Under KSh 10M</option>
+                    <option value="20000000">Under KSh 20M</option>
+                </select>
+
+                <select id="yearFilter"
+                    aria-label="Filter by minimum year">
+                    <option value="">Any Year</option>
+                    <option value="2025">2025 and newer</option>
+                    <option value="2022">2022 and newer</option>
+                    <option value="2020">2020 and newer</option>
+                    <option value="2018">2018 and newer</option>
+                    <option value="2015">2015 and newer</option>
+                </select>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     VEHICLE LISTINGS
+===================================================== -->
+
+<section id="cars" class="cars-section">
+
+    <div class="container">
+
+        <div class="section-heading section-heading-row">
+
+            <div>
+                <span class="section-eyebrow">
+                    EXPLORE OUR COLLECTION
+                </span>
+
+                <h2>Fresh Listings in Kenya</h2>
+
+                <p id="inventoryCount" class="muted"></p>
+                <p id="listingSourceNotice" class="muted" hidden></p>
+            </div>
+
+            <a href="#cars" class="view-all-link">
+                View All Cars →
+            </a>
+
+        </div>
+
+        <div class="marketplace-layout">
+
+            <div class="car-grid" id="carGrid"></div>
+
+            <aside class="trust-panel">
+
+                <div class="trust-icon">🤝</div>
+
+                <h3>Trusted & Secure</h3>
+
+                <p>Buy with confidence on DRIVE HUB.</p>
+
+                <ul>
+                    <li>✓ Verified Dealers</li>
+                    <li>✓ Secure Payments</li>
+                    <li>✓ Nationwide Listings</li>
+                    <li>✓ Dedicated Support</li>
+                </ul>
+
+                <button class="btn btn-primary" type="button"
+                    onclick="openAccount()">
+                    Join Our Community →
+                </button>
+
+            </aside>
+
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <h3>No vehicles found</h3>
+            <p>Try changing your search or filters.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- =====================================================
+     MARKETPLACE STATISTICS
+===================================================== -->
+
+<section class="statistics-section">
+    <div class="container">
+
+        <div class="statistics-grid">
+
+            <div class="statistic-item">
+                <span class="statistic-icon">🚘</span>
+                <div>
+                    <strong>10,000+</strong>
+                    <span>Cars Listed</span>
+                </div>
+            </div>
+
+            <div class="statistic-item">
+                <span class="statistic-icon">👥</span>
+                <div>
+                    <strong>5,000+</strong>
+                    <span>Happy Customers</span>
+                </div>
+            </div>
+
+            <div class="statistic-item">
+                <span class="statistic-icon">🛡️</span>
+                <div>
+                    <strong>100%</strong>
+                    <span>Secure Transactions</span>
+                </div>
+            </div>
+
+            <div class="statistic-item">
+                <span class="statistic-icon">🎧</span>
+                <div>
+                    <strong>24/7</strong>
+                    <span>Customer Support</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     IMPORTED VEHICLES
+===================================================== -->
+
+<section class="imports-section" id="imports">
+    <div class="container">
+
+        <div class="imports-content">
+
+            <div class="imports-text">
+
+                <span class="section-eyebrow">COMING SOON</span>
+
+                <h2>
+                    YOUR NEXT CAR.
+                    <span>FROM ANYWHERE.</span>
+                </h2>
+
+                <p>
+                    DRIVE HUB is preparing an imported vehicle service
+                    to help customers explore vehicles sourced from
+                    international markets.
+                </p>
+
+                <div class="coming-soon-label">
+                    COMING SOON
+                </div>
+
+                <p class="imports-note">
+                    Import services are not yet available.
+                    Stay tuned for updates.
+                </p>
+
+            </div>
+
+            <div class="imports-gallery">
+
+                <div class="import-image-main">
+                    <img
+                        src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=85"
+                        alt="Premium imported vehicle">
+                </div>
+
+                <div class="import-image-small">
+                    <img
+                        src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=85"
+                        alt="Luxury sports vehicle">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     DEALER DIRECTORY
+===================================================== -->
+
+<section id="dealers" class="dealers-section">
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span class="section-eyebrow">OUR NETWORK</span>
+
+            <h2>Trusted Vehicle Dealers</h2>
+
+            <p>
+                Connect with approved vehicle dealers on DRIVE HUB.
+            </p>
+
+        </div>
+
+        <div class="dealer-grid" id="dealerGrid"></div>
+
+    </div>
+</section>
+
+<!-- =====================================================
+     ABOUT DRIVE HUB
+===================================================== -->
+
+<section class="about-section" id="about">
+    <div class="container">
+
+        <div class="section-heading">
+            <span class="section-eyebrow">ABOUT US</span>
+            <h2>Drive Your Dream with DRIVE HUB</h2>
+            <p>
+                A marketplace connecting vehicle buyers and dealers
+                across Kenya.
+            </p>
+        </div>
+
+        <div class="about-grid">
+
+            <article class="about-card">
+                <span>🚘</span>
+                <h3>Discover</h3>
+                <p>
+                    Explore different vehicles and compare listings
+                    from dealerships.
+                </p>
+            </article>
+
+            <article class="about-card">
+                <span>🤝</span>
+                <h3>Connect</h3>
+                <p>
+                    Contact dealers directly and arrange vehicle
+                    enquiries or viewings.
+                </p>
+            </article>
+
+            <article class="about-card">
+                <span>🛡️</span>
+                <h3>Buy with Confidence</h3>
+                <p>
+                    Find dealer information and make informed
+                    decisions before purchasing.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     VEHICLE DETAILS MODAL
+===================================================== -->
+
+<div class="modal" id="detailsModal">
+
+    <div class="modal-content large">
+
+        <button class="modal-close" type="button"
+            onclick="closeModal('detailsModal')"
+            aria-label="Close vehicle details">×</button>
+
+        <div id="detailsContent"></div>
+
+    </div>
+</div>
+
+<!-- =====================================================
+     BUYER LOGIN / REGISTRATION
+===================================================== -->
+
+<div class="modal glass-modal" id="accountModal">
+
+    <div class="modal-content glass-panel">
+
+        <button class="modal-close" type="button"
+            onclick="closeModal('accountModal')"
+            aria-label="Close buyer account">×</button>
+
+        <div class="account-heading">
+
+            <span class="section-eyebrow">DRIVE HUB MEMBERS</span>
+
+            <h2 id="accountTitle">Buyer Account</h2>
+
+            <p>Access your personalised buyer experience.</p>
+
+        </div>
+
+        <div class="tabs">
+
+            <button id="loginTab" class="active" type="button"
+                onclick="setAccountMode('login')">
+                Login
+            </button>
+
+            <button id="registerTab" type="button"
+                onclick="setAccountMode('register')">
+                Register
+            </button>
+
+        </div>
+
+        <form id="buyerForm">
+
+            <div class="form-group" id="buyerNameField" style="display:none;">
+
+                <label for="buyerName">Full Name</label>
+
+                <input id="buyerName" type="text"
+                    placeholder="Your full name"
+                    autocomplete="name">
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="buyerEmail">Email Address</label>
+
+                <input id="buyerEmail" type="email" required
+                    placeholder="Email address"
+                    autocomplete="email">
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="buyerPassword">Password</label>
+
+                <input id="buyerPassword" type="password" required
+                    placeholder="Password"
+                    autocomplete="current-password">
+
+            </div>
+
+            <button class="btn btn-primary" id="buyerSubmit"
+                type="submit" style="width:100%;">
+                Login
+            </button>
+
+        </form>
+
+        <!-- BUYER OTP -->
+
+        <div id="otpVerificationPanel"
+            class="otp-verification-panel" style="display:none;">
+
+            <h3>Verify your account</h3>
+
+            <p>
+                Enter the verification code sent to your registered contact.
+            </p>
+
+            <form id="otpVerificationForm">
+
+                <div class="form-group">
+
+                    <label for="otpCode">Verification Code</label>
+
+                    <input id="otpCode" type="text"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        placeholder="Enter code">
+
+                </div>
+
+                <button class="btn btn-primary"
+                    type="submit" style="width:100%;">
+                    Verify Account
+                </button>
+
+                <button class="btn btn-secondary"
+                    id="resendOtpButton" type="button"
+                    style="width:100%;margin-top:10px;">
+                    Resend Code
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- =====================================================
+     BUYER DASHBOARD / PROFILE
+===================================================== -->
+
+<div class="modal glass-modal" id="buyerAreaModal">
+
+    <div class="modal-content large glass-panel profile-dashboard">
+
+        <button class="modal-close" type="button"
+            onclick="closeModal('buyerAreaModal')"
+            aria-label="Close buyer dashboard">×</button>
+
+        <div class="dashboard-cover buyer-profile-cover">
+
+            <div class="profile-dashboard-heading">
+
+                <div class="profile-avatar large-avatar"
+                    id="buyerDashboardAvatar">👤</div>
+
+                <div>
+                    <span class="section-eyebrow">
+                        YOUR DRIVE HUB ACCOUNT
+                    </span>
+
+                    <h2 id="buyerWelcome">My Profile</h2>
+
+                    <p>Manage your account and vehicle discovery experience.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-tabs">
+
+            <button type="button"
+                onclick="showBuyerSection('profile')">
+                👤 My Profile
+            </button>
+
+            <button type="button"
+                onclick="showBuyerSection('favourites')">
+                ♥ Saved Cars
+            </button>
+
+            <button type="button"
+                onclick="showBuyerSection('cart')">
+                🛒 My Cart
+            </button>
+
+            <button type="button"
+                onclick="showBuyerSection('bookings')">
+                ◷ Bookings
+            </button>
+
+            <button type="button"
+                onclick="showBuyerSection('assistant')">
+                ✦ My Assistant
+            </button>
+
+        </div>
+
+        <div id="buyerAreaContent" class="dashboard-panel"></div>
+
+        <!-- BUYER ASSISTANT -->
+
+        <section id="buyerAssistantPanel"
+            class="assistant-panel" style="display:none;">
+
+            <div class="assistant-heading">
+
+                <h3 id="buyerAssistantName">
+                    Your DRIVE HUB Assistant
+                </h3>
+
+                <p>
+                    Your personal assistant for general questions
+                    and marketplace help.
+                </p>
+
+            </div>
+
+            <div class="assistant-chat" id="buyerAssistantChat"></div>
+
+            <form id="buyerAssistantForm"
+                class="support-chat-form">
+
+                <input id="buyerAssistantMessage"
+                    type="text"
+                    placeholder="Ask your assistant..."
+                    required>
+
+                <button class="btn btn-primary" type="submit">
+                    Send
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+</div>
+
+<!-- =====================================================
+     DEALER AUTHENTICATION
+===================================================== -->
+
+<div class="modal glass-modal" id="dealerAuthModal">
+
+    <div class="modal-content glass-panel">
+
+        <button class="modal-close" type="button"
+            onclick="closeModal('dealerAuthModal')"
+            aria-label="Close dealer account">×</button>
+
+        <div class="account-heading">
+
+            <span class="section-eyebrow">DEALER NETWORK</span>
+
+            <h2 id="dealerAuthTitle">Dealer Account</h2>
+
+            <p>Manage your dealership on DRIVE HUB.</p>
+
+        </div>
+
+        <div class="tabs">
+
+            <button id="dealerLoginTab" type="button"
+                onclick="setDealerMode('login')">
+                Login
+            </button>
+
+            <button id="dealerRegisterTab" class="active"
+                type="button" onclick="setDealerMode('register')">
+                Register
+            </button>
+
+        </div>
+
+        <form id="dealerAuthForm">
+
+            <div id="dealerRegisterFields">
+
+                <div class="form-group">
+                    <label for="dealerBusiness">Business Name</label>
+                    <input id="dealerBusiness" type="text"
+                        autocomplete="organization">
+                </div>
+
+                <div class="form-group">
+                    <label for="dealerOwner">Owner Name</label>
+                    <input id="dealerOwner" type="text"
+                        autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="dealerPhone">Phone Number</label>
+                    <input id="dealerPhone" type="tel"
+                        autocomplete="tel">
+                </div>
+
+                <div class="form-group">
+                    <label for="dealerWhatsApp">WhatsApp Number</label>
+                    <input id="dealerWhatsApp" type="tel"
+                        placeholder="2547XXXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="dealerLocation">Location</label>
+                    <input id="dealerLocation" type="text"
+                        placeholder="Town or county">
+                </div>
+
+                <div class="form-group">
+                    <label for="dealerDescription">Business Description</label>
+                    <textarea id="dealerDescription" rows="3"
+                        placeholder="Tell buyers about your dealership"></textarea>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="dealerEmail">Email Address</label>
+
+                <input id="dealerEmail" type="email" required
+                    autocomplete="email">
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="dealerPassword">Password</label>
+
+                <input id="dealerPassword" type="password"
+                    required autocomplete="current-password">
+
+            </div>
+
+            <button class="btn btn-primary"
+                type="submit" style="width:100%;">
+                Continue
+            </button>
+
+        </form>
+
+        <!-- DEALER OTP -->
+
+        <div id="dealerOtpVerificationPanel"
+            class="otp-verification-panel" style="display:none;">
+
+            <h3>Verify dealer account</h3>
+
+            <p>
+                Enter the verification code sent to your registered contact.
+            </p>
+
+            <form id="dealerOtpVerificationForm">
+
+                <div class="form-group">
+
+                    <label for="dealerOtpCode">Verification Code</label>
+
+                    <input id="dealerOtpCode" type="text"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        placeholder="Enter code">
+
+                </div>
+
+                <button class="btn btn-primary"
+                    type="submit" style="width:100%;">
+                    Verify Dealer Account
+                </button>
+
+                <button class="btn btn-secondary"
+                    id="dealerResendOtpButton" type="button"
+                    style="width:100%;margin-top:10px;">
+                    Resend Code
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- =====================================================
+     DEALER DASHBOARD
+===================================================== -->
+
+<div class="modal" id="dealerDashboardModal">
+
+    <div class="modal-content large dealer-dashboard">
+
+        <button class="modal-close" type="button"
+            onclick="closeModal('dealerDashboardModal')"
+            aria-label="Close dealer dashboard">×</button>
+
+        <div class="dashboard-cover dealer-dashboard-cover">
+
+            <span class="section-eyebrow">
+                DRIVE HUB DEALER CENTRE
+            </span>
+
+            <h2>My Dealer Dashboard</h2>
+
+            <p>Manage your dealership and grow your business.</p>
+
+        </div>
+
+        <div class="dealer-account-status"
+            id="dealerAccountStatus"></div>
+
+        <div class="dashboard-tabs">
+
+            <button type="button"
+                onclick="showDealerSection('profile')">
+                👤 My Profile
+            </button>
+
+            <button type="button"
+                onclick="showDealerSection('listings')">
+                🚘 My Vehicles
+            </button>
+
+            <button type="button"
+                onclick="showDealerSection('add')">
+                ＋ Add Vehicle
+            </button>
+
+            <button type="button"
+                onclick="showDealerSection('payments')">
+                👑 Subscriptions & Payments
+            </button>
+
+            <button type="button"
+                onclick="showDealerSection('assistant')">
+                ✦ My Assistant
+            </button>
+
+        </div>
+
+        <div id="dealerDashboardContent"
+            class="dashboard-panel"></div>
+
+        <!-- DEALER SUBSCRIPTION STATUS AND COUNTDOWN -->
+
+        <section id="dealerSubscriptionPanel"
+            class="subscription-panel">
+
+            <div class="subscription-heading">
+
+                <span class="section-eyebrow">
+                    DEALER MEMBERSHIP
+                </span>
+
+                <h3>My Subscription</h3>
+
+                <p>
+                    Track your plan, payment confirmation and expiry.
+                </p>
+
+            </div>
+
+            <div class="subscription-status-card">
+
+                <div class="subscription-status-information">
+
+                    <span class="subscription-status-icon">👑</span>
+
+                    <div>
+                        <h4>Subscription Status</h4>
+                        <p id="dealerSubscriptionPlanName">
+                            Your current plan will appear here.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div id="dealerSubscriptionCountdown"
+                    class="subscription-countdown"
+                    aria-live="polite">
+
+                    <span>Subscription countdown will appear here.</span>
+
+                </div>
+
+            </div>
+
+            <div id="subscriptionPaymentArea"></div>
+
+            <!-- PAYMENT METHOD INFORMATION -->
+
+            <div class="payment-methods-panel">
+
+                <h4>Secure & Trusted Payments</h4>
+
+                <p>Available payment methods are shown below.</p>
+
+                <div class="payment-method-icons">
+
+                    <span class="payment-method mpesa-icon">
+                        M-PESA
+                    </span>
+
+                    <span class="payment-method visa-icon">
+                        VISA
+                    </span>
+
+                    <span class="payment-method mastercard-icon">
+                        Mastercard
+                    </span>
+
+                    <span class="payment-method bank-icon">
+                        🏦 Bank Transfer
+                    </span>
+
+                </div>
+
+                <p class="payment-security-note">
+                    Subscription activation requires confirmed payment.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- DEALER ASSISTANT -->
+
+        <section id="dealerAssistantPanel"
+            class="assistant-panel" style="display:none;">
+
+            <div class="assistant-heading">
+
+                <h3 id="dealerAssistantName">
+                    Your DRIVE HUB Assistant
+                </h3>
+
+                <p>
+                    Your personal assistant for dealership management
+                    and general questions.
+                </p>
+
+            </div>
+
+            <div class="assistant-chat" id="dealerAssistantChat"></div>
+
+            <form id="dealerAssistantForm"
+                class="support-chat-form">
+
+                <input id="dealerAssistantMessage"
+                    type="text"
+                    placeholder="Ask your assistant..."
+                    required>
+
+                <button class="btn btn-primary" type="submit">
+                    Send
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+</div>
+
+<!-- =====================================================
+     CUSTOMER CARE
+===================================================== -->
+
+<button class="customer-care-float" type="button"
+    onclick="openCustomerCare()"
+    aria-label="Open customer care" title="Customer Care">
+
+    <span class="customer-care-icon">🎧</span>
+    <span class="customer-care-label">Need Help?</span>
+
+</button>
+
+<div class="modal glass-modal" id="customerCareModal">
+
+    <div class="modal-content glass-panel">
+
+        <button class="modal-close" type="button"
+            onclick="closeModal('customerCareModal')"
+            aria-label="Close customer care">×</button>
+
+        <span class="section-eyebrow">WE ARE HERE TO HELP</span>
+
+        <h2 id="customerCareTitle">
+            Daniel – Customer Care
+        </h2>
+
+        <p class="muted" id="customerCareSubtitle">
+            Ask Daniel about accounts, vehicle listings, bookings,
+            subscriptions and using DRIVE HUB.
+        </p>
+
+        <a class="btn btn-primary customer-care-whatsapp"
+            href="https://wa.me/254742879111?text=Hello%20DRIVE%20HUB%2C%20I%20need%20help."
+            target="_blank" rel="noopener noreferrer">
+            Chat with us on WhatsApp
+        </a>
+
+        <div class="support-chat" id="supportChat">
+
+            <div class="chat-message bot">
+                Hello! I'm Daniel from DRIVE HUB Customer Care.
+                How may I assist you today?
+            </div>
+
+        </div>
+
+        <form id="supportChatForm"
+            class="support-chat-form">
+
+            <input type="text" id="supportMessage"
+                placeholder="Type your message..."
+                aria-label="Your customer care message" required>
+
+            <button class="btn btn-primary"
+                id="supportSendButton" type="submit">
+                Send
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div id="toast" class="toast"
+    role="status" aria-live="polite"></div>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer id="footer">
+
+    <div class="container footer-inner">
+
+        <div>
+            <h3>DRIVE HUB</h3>
+            <p>Kenya's Trusted Car Marketplace</p>
+        </div>
+
+        <div>
+            <p>Discover. Compare. Connect.</p>
+
+            <p>
+                © <span id="currentYear"></span>
+                DRIVE HUB. All rights reserved.
+            </p>
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="./script.js"></script>
+
+</body>
+</html>
