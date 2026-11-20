@@ -13,7 +13,32 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="admin-auth-pending">
+
+<section class="admin-auth-gate" id="adminAuthGate" aria-labelledby="adminAuthTitle">
+  <div class="admin-auth-card">
+    <p class="eyebrow">DRIVE HUB MANAGEMENT</p>
+    <h1 id="adminAuthTitle">Administrator sign in</h1>
+    <p id="adminAuthMessage" class="muted" role="status">
+      Checking administrator access…
+    </p>
+
+    <form id="adminSignInForm" hidden>
+      <label for="adminEmail">Email</label>
+      <input id="adminEmail" type="email" autocomplete="username" required>
+
+      <label for="adminPassword">Password</label>
+      <input id="adminPassword" type="password"
+        autocomplete="current-password" required>
+
+      <button class="primary-btn full-btn" id="adminSignInButton" type="submit">
+        Sign in
+      </button>
+    </form>
+
+    <a class="admin-auth-link" href="./index.html">Back to DRIVE HUB</a>
+  </div>
+</section>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
@@ -63,6 +88,10 @@
         <strong>Administrator</strong>
         <small>Control Room</small>
       </div>
+
+      <button type="button" class="small-btn" id="adminSignOut" hidden>
+        Sign out
+      </button>
     </div>
 
   </header>
@@ -633,7 +662,7 @@
 
         <div>
           <label for="carYear">Year</label>
-          <input id="carYear" type="number" min="1900" required placeholder="2018">
+          <input id="carYear" type="number" min="1950" required placeholder="2018">
         </div>
 
         <div>
@@ -696,21 +725,22 @@
         placeholder="Vehicle condition, features and other details"
       ></textarea>
 
-      <label for="carImages">Vehicle photographs (multiple allowed)</label>
-
-      <input
-        type="file"
-        id="carImages"
-        accept="image/*"
-        multiple
-      >
-
+      <label for="carImageUrls">Vehicle image URLs (one per line, up to 8)</label>
+      <textarea id="carImageUrls" rows="3"
+        placeholder="https://res.cloudinary.com/your-cloud/image/upload/..."></textarea>
       <p class="muted">
-        Images are stored in this browser. Large image collections
-        may exceed browser storage capacity.
+        Add hosted image links. Uploads are not sent to Vercel Blob.
+        Redact number plates before publishing.
       </p>
 
       <div id="carImagePreview" class="image-preview"></div>
+
+      <label for="carPhone">WhatsApp number (optional)</label>
+      <input id="carPhone" type="tel" placeholder="2547XXXXXXXX">
+
+      <label for="carTikTokUrl">TikTok review link (optional)</label>
+      <input id="carTikTokUrl" type="url"
+        placeholder="https://www.tiktok.com/@account/video/...">
 
       <button class="primary-btn full-btn" type="submit">
         Save Vehicle
@@ -800,6 +830,7 @@
 
 <!-- JAVASCRIPT -->
 <script src="admin.js"></script>
+<script type="module" src="./admin-auth.js"></script>
 
 </body>
 </html>

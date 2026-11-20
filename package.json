@@ -5,7 +5,14 @@
   "engines": {
     "node": ">=20"
   },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
   "dependencies": {
-    "@neondatabase/serverless": "^1.2.1"
+    "@neon/neon-js": "^0.10.2",
+    "@neondatabase/serverless": "^1.2.1",
+    "vite": "^8.3.8"
   }
 }

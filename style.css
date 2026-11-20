@@ -1019,6 +1019,17 @@ footer {
     margin-top: 5px;
 }
 
+.footer-admin-link {
+    color: inherit;
+    opacity: .7;
+    text-decoration: none;
+}
+
+.footer-admin-link:hover {
+    color: var(--accent-light);
+    opacity: 1;
+}
+
 /* MODALS */
 
 .modal {

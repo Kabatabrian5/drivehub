@@ -28,3 +28,54 @@ CREATE INDEX IF NOT EXISTS vehicles_public_created_idx
 
 CREATE INDEX IF NOT EXISTS vehicles_make_model_idx
     ON vehicles (LOWER(make), LOWER(model));
+
+CREATE TABLE IF NOT EXISTS drivehub_admins (
+    user_id TEXT PRIMARY KEY,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE vehicles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE drivehub_admins ENABLE ROW LEVEL SECURITY;
+
+CREATE OR REPLACE FUNCTION public.is_drivehub_admin()
+RETURNS BOOLEAN
+LANGUAGE SQL
+STABLE
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+    SELECT EXISTS (
+        SELECT 1
+        FROM public.drivehub_admins
+        WHERE user_id = auth.user_id()
+    );
+$$;
+
+REVOKE ALL ON TABLE drivehub_admins FROM PUBLIC, anonymous, authenticated;
+REVOKE ALL ON FUNCTION public.is_drivehub_admin() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.is_drivehub_admin() TO authenticated;
+
+GRANT USAGE ON SCHEMA public TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE vehicles TO authenticated;
+
+DROP POLICY IF EXISTS vehicles_admin_select ON vehicles;
+DROP POLICY IF EXISTS vehicles_admin_insert ON vehicles;
+DROP POLICY IF EXISTS vehicles_admin_update ON vehicles;
+DROP POLICY IF EXISTS vehicles_admin_delete ON vehicles;
+
+CREATE POLICY vehicles_admin_select ON vehicles
+    FOR SELECT TO authenticated
+    USING (public.is_drivehub_admin());
+
+CREATE POLICY vehicles_admin_insert ON vehicles
+    FOR INSERT TO authenticated
+    WITH CHECK (public.is_drivehub_admin());
+
+CREATE POLICY vehicles_admin_update ON vehicles
+    FOR UPDATE TO authenticated
+    USING (public.is_drivehub_admin())
+    WITH CHECK (public.is_drivehub_admin());
+
+CREATE POLICY vehicles_admin_delete ON vehicles
+    FOR DELETE TO authenticated
+    USING (public.is_drivehub_admin());

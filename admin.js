@@ -162,7 +162,10 @@ function toast(message) {
 
 function refreshData() {
   dealers = getData(KEYS.dealers, []);
-  cars = getData(KEYS.cars, []);
+  const databaseCars = window.driveHubDatabase?.getCachedVehicles?.();
+  cars = Array.isArray(databaseCars)
+    ? databaseCars
+    : getData(KEYS.cars, []);
   bookings = getData(KEYS.bookings, []);
   buyers = getData(KEYS.buyers, []);
   payments = getData(KEYS.payments, []);
@@ -713,6 +716,21 @@ function updateCar(id, status) {
     return toast("Invalid vehicle status.");
   }
 
+  if (window.driveHubDatabase?.isEnabled()) {
+    window.driveHubDatabase.updateVehicle(id, { status })
+      .then(async () => {
+        window.setAdminVehicles(
+          await window.driveHubDatabase.listVehicles()
+        );
+        toast("Vehicle updated: " + status);
+      })
+      .catch(error => {
+        console.error("Could not update vehicle in Neon:", error);
+        toast(error.message || "Could not update vehicle in Neon.");
+      });
+    return;
+  }
+
   car.status = status;
   car.updatedAt = new Date().toISOString();
 
@@ -721,12 +739,26 @@ function updateCar(id, status) {
   toast("Vehicle updated: " + status);
 }
 
-function deleteCar(id) {
+async function deleteCar(id) {
   if (!confirm("Permanently delete this vehicle listing?")) {
     return;
   }
 
   refreshData();
+
+  if (window.driveHubDatabase?.isEnabled()) {
+    try {
+      await window.driveHubDatabase.deleteVehicle(id);
+      window.setAdminVehicles(
+        await window.driveHubDatabase.listVehicles()
+      );
+      toast("Vehicle deleted.");
+    } catch (error) {
+      console.error("Could not delete vehicle from Neon:", error);
+      toast(error.message || "Could not delete vehicle from Neon.");
+    }
+    return;
+  }
 
   cars = cars.filter(c =>
     String(c.id) !== String(id)
@@ -795,10 +827,13 @@ function openCarModal(car = null) {
     car?.description || "";
 
   $("carStatus").value = car?.status || "approved";
+  $("carPhone").value = car?.phone || "";
+  $("carTikTokUrl").value = car?.tiktokUrl || "";
 
   selectedImages = Array.isArray(car?.images)
     ? [...car.images]
     : (car?.image ? [car.image] : []);
+  $("carImageUrls").value = selectedImages.join("\n");
 
   loadDealerOptions(car?.dealerId || "");
   renderImagePreview();
@@ -853,78 +888,63 @@ function renderImagePreview() {
 
 function removeCarImage(index) {
   selectedImages.splice(index, 1);
+  $("carImageUrls").value = selectedImages.join("\n");
   renderImagePreview();
 }
 
-function resizeImage(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+function parseVehicleImageUrls(value) {
+  const urls = String(value || "")
+    .split(/\r?\n/)
+    .map(item => item.trim())
+    .filter(Boolean);
 
-    reader.onload = () => {
-      const img = new Image();
+  if (urls.length > 8) {
+    throw new Error("Add no more than 8 image URLs.");
+  }
 
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const max = 1200;
+  return urls.map(value => {
+    let url;
 
-        const ratio = Math.min(
-          1,
-          max / Math.max(img.width, img.height)
-        );
+    try {
+      url = new URL(value);
+    } catch {
+      throw new Error("Each vehicle image must be a valid HTTPS URL.");
+    }
 
-        canvas.width = Math.round(img.width * ratio);
-        canvas.height = Math.round(img.height * ratio);
+    if (url.protocol !== "https:" || url.username || url.password) {
+      throw new Error("Vehicle images must use secure HTTPS links.");
+    }
 
-        const ctx = canvas.getContext("2d");
-
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
-
-        resolve(canvas.toDataURL("image/jpeg", 0.78));
-      };
-
-      img.onerror = reject;
-      img.src = reader.result;
-    };
-
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+    return url.href;
   });
 }
 
-if ($("carImages")) {
-  $("carImages").addEventListener("change", async event => {
-    const files = Array.from(event.target.files || []);
+function isValidTikTokUrl(value) {
+  if (!value) return true;
 
-    for (const file of files) {
-      if (!file.type.startsWith("image/")) continue;
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase();
+    return url.protocol === "https:" &&
+      (host === "tiktok.com" || host.endsWith(".tiktok.com"));
+  } catch {
+    return false;
+  }
+}
 
-      if (file.size > 5 * 1024 * 1024) {
-        toast("One image exceeds 5MB. Please choose a smaller image.");
-        continue;
-      }
-
-      try {
-        const image = await resizeImage(file);
-
-        selectedImages.push(image);
-        renderImagePreview();
-      } catch {
-        toast("Could not process one of the images.");
-      }
+if ($("carImageUrls")) {
+  $("carImageUrls").addEventListener("input", event => {
+    try {
+      selectedImages = parseVehicleImageUrls(event.target.value);
+      renderImagePreview();
+    } catch {
+      $("carImagePreview").replaceChildren();
     }
-
-    event.target.value = "";
   });
 }
 
 if ($("carForm")) {
-  $("carForm").addEventListener("submit", event => {
+  $("carForm").addEventListener("submit", async event => {
     event.preventDefault();
     refreshData();
 
@@ -935,6 +955,18 @@ if ($("carForm")) {
     );
 
     const dealerId = $("carDealer").value;
+    let images;
+
+    try {
+      images = parseVehicleImageUrls($("carImageUrls").value);
+    } catch (error) {
+      return toast(error.message);
+    }
+
+    const tiktokUrl = $("carTikTokUrl").value.trim();
+    if (!isValidTikTokUrl(tiktokUrl)) {
+      return toast("Enter a valid HTTPS TikTok video link.");
+    }
 
     const vehicle = {
       ...(existing || {}),
@@ -953,10 +985,12 @@ if ($("carForm")) {
       mileage: Number($("carMileage").value || 0),
 
       description: $("carDescriptionInput").value.trim(),
+      phone: $("carPhone").value.trim(),
+      tiktokUrl,
 
       dealerId: dealerId || null,
 
-      images: [...selectedImages],
+      images,
 
       status: $("carStatus").value,
 
@@ -982,6 +1016,28 @@ if ($("carForm")) {
       )?.status !== "approved"
     ) {
       return toast("Select an approved dealer.");
+    }
+
+    if (window.driveHubDatabase?.isEnabled()) {
+      const submit = $("carForm").querySelector('[type="submit"]');
+      submit.disabled = true;
+      submit.textContent = "Saving to database…";
+
+      try {
+        await window.driveHubDatabase.saveVehicle(vehicle, Boolean(existing));
+        window.setAdminVehicles(
+          await window.driveHubDatabase.listVehicles()
+        );
+        $("carModal").classList.remove("show");
+        toast(existing ? "Vehicle updated in Neon." : "Vehicle added to Neon.");
+      } catch (error) {
+        console.error("Could not save vehicle to Neon:", error);
+        toast(error.message || "Could not save vehicle to Neon.");
+      } finally {
+        submit.disabled = false;
+        submit.textContent = "Save Vehicle";
+      }
+      return;
     }
 
     if (existing) {
@@ -1976,6 +2032,19 @@ function renderAll() {
 }
 
 renderAll();
+
+window.setAdminVehicles = function (vehicles) {
+  cars = Array.isArray(vehicles) ? vehicles : [];
+  window.driveHubDatabase?.setCachedVehicles(cars);
+
+  try {
+    localStorage.setItem(KEYS.cars, JSON.stringify(cars));
+  } catch (error) {
+    console.warn("Could not cache database vehicles locally:", error);
+  }
+
+  renderAll();
+};
 
 /* ==========================================
    CROSS-TAB REFRESH
