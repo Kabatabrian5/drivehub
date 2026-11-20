@@ -3,7 +3,11 @@ import { createClient } from "@neon/neon-js";
 const gate = document.getElementById("adminAuthGate");
 const message = document.getElementById("adminAuthMessage");
 const form = document.getElementById("adminSignInForm");
+const resetRequestForm = document.getElementById("passwordResetRequestForm");
+const newPasswordForm = document.getElementById("newPasswordForm");
 const signInButton = document.getElementById("adminSignInButton");
+const resetRequestButton = document.getElementById("resetRequestButton");
+const saveNewPasswordButton = document.getElementById("saveNewPasswordButton");
 const signOutButton = document.getElementById("adminSignOut");
 
 let client = null;
@@ -14,6 +18,26 @@ function showGate(text, showForm) {
     document.body.classList.add("admin-auth-pending");
     message.textContent = text;
     form.hidden = !showForm;
+    resetRequestForm.hidden = true;
+    newPasswordForm.hidden = true;
+    signOutButton.hidden = true;
+}
+
+function showPasswordResetRequest(text) {
+    document.body.classList.add("admin-auth-pending");
+    message.textContent = text;
+    form.hidden = true;
+    resetRequestForm.hidden = false;
+    newPasswordForm.hidden = true;
+    signOutButton.hidden = true;
+}
+
+function showNewPasswordForm(text) {
+    document.body.classList.add("admin-auth-pending");
+    message.textContent = text;
+    form.hidden = true;
+    resetRequestForm.hidden = true;
+    newPasswordForm.hidden = false;
     signOutButton.hidden = true;
 }
 
@@ -216,6 +240,78 @@ async function handleSignIn(event) {
     }
 }
 
+async function handlePasswordResetRequest(event) {
+    event.preventDefault();
+    if (!client) return;
+
+    resetRequestButton.disabled = true;
+    message.textContent = "Sending reset instructions…";
+
+    try {
+        const redirectTo = new URL("./admin.html", window.location.href).href;
+        const { error } = await client.auth.requestPasswordReset({
+            email: document.getElementById("resetEmail").value.trim(),
+            redirectTo
+        });
+
+        if (error) {
+            throw new Error(errorText(error, "Could not request a password reset."));
+        }
+
+        showPasswordResetRequest(
+            "If an account exists for that email, password reset instructions have been sent."
+        );
+    } catch (error) {
+        console.error("Password reset request failed:", error);
+        showPasswordResetRequest(error.message);
+    } finally {
+        resetRequestButton.disabled = false;
+    }
+}
+
+async function handleNewPassword(event) {
+    event.preventDefault();
+    if (!client) return;
+
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (!token) {
+        showGate("This password reset link is invalid or has expired. Request a new one.", true);
+        return;
+    }
+
+    const password = document.getElementById("newAdminPassword").value;
+    const confirmation = document.getElementById("confirmAdminPassword").value;
+    if (password !== confirmation) {
+        message.textContent = "The passwords do not match.";
+        return;
+    }
+
+    saveNewPasswordButton.disabled = true;
+    message.textContent = "Updating your password…";
+
+    try {
+        const { error } = await client.auth.resetPassword({
+            newPassword: password,
+            token
+        });
+
+        if (error) {
+            throw new Error(errorText(error, "Could not update your password."));
+        }
+
+        window.history.replaceState({}, "", window.location.pathname);
+        document.getElementById("adminPassword").value = "";
+        document.getElementById("newAdminPassword").value = "";
+        document.getElementById("confirmAdminPassword").value = "";
+        showGate("Password updated. Sign in with your new password.", true);
+    } catch (error) {
+        console.error("Password reset failed:", error);
+        showNewPasswordForm(error.message);
+    } finally {
+        saveNewPasswordButton.disabled = false;
+    }
+}
+
 async function handleSignOut() {
     try {
         const { error } = await client.auth.signOut();
@@ -232,6 +328,16 @@ async function handleSignOut() {
 }
 
 form.addEventListener("submit", handleSignIn);
+resetRequestForm.addEventListener("submit", handlePasswordResetRequest);
+newPasswordForm.addEventListener("submit", handleNewPassword);
+document.getElementById("forgotPasswordButton").addEventListener("click", () => {
+    document.getElementById("resetEmail").value =
+        document.getElementById("adminEmail").value.trim();
+    showPasswordResetRequest("Enter your account email and we’ll send reset instructions.");
+});
+document.getElementById("backToSignInFromRequest").addEventListener("click", () => {
+    showGate("Sign in with your Neon Auth administrator account.", true);
+});
 signOutButton.addEventListener("click", handleSignOut);
 
 window.driveHubDatabase = {
@@ -263,6 +369,18 @@ async function initializeAdminAuth() {
             auth: { url: authUrl },
             dataApi: { url: dataApiUrl }
         });
+
+        const query = new URLSearchParams(window.location.search);
+        if (query.has("error")) {
+            window.history.replaceState({}, "", window.location.pathname);
+            showGate("This password reset link is invalid or expired. Request a new one.", true);
+            return;
+        }
+
+        if (query.has("token")) {
+            showNewPasswordForm("Choose a new password for your account.");
+            return;
+        }
 
         const { data, error } = await client.auth.getSession();
         if (error) {

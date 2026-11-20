@@ -34,6 +34,35 @@
       <button class="primary-btn full-btn" id="adminSignInButton" type="submit">
         Sign in
       </button>
+      <button class="admin-auth-link" id="forgotPasswordButton" type="button">
+        Forgot password?
+      </button>
+    </form>
+
+    <form id="passwordResetRequestForm" hidden>
+      <label for="resetEmail">Email</label>
+      <input id="resetEmail" type="email" autocomplete="email" required>
+
+      <button class="primary-btn full-btn" id="resetRequestButton" type="submit">
+        Send reset link
+      </button>
+      <button class="admin-auth-link" id="backToSignInFromRequest" type="button">
+        Back to sign in
+      </button>
+    </form>
+
+    <form id="newPasswordForm" hidden>
+      <label for="newAdminPassword">New password</label>
+      <input id="newAdminPassword" type="password" autocomplete="new-password"
+        minlength="8" maxlength="128" required>
+
+      <label for="confirmAdminPassword">Confirm new password</label>
+      <input id="confirmAdminPassword" type="password" autocomplete="new-password"
+        minlength="8" maxlength="128" required>
+
+      <button class="primary-btn full-btn" id="saveNewPasswordButton" type="submit">
+        Save new password
+      </button>
     </form>
 
     <a class="admin-auth-link" href="./index.html">Back to DRIVE HUB</a>

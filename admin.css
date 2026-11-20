@@ -321,6 +321,11 @@ body.admin-auth-pending > .toast {
   text-decoration: none;
 }
 
+.admin-auth-link:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
 .admin-auth-link:hover {
   text-decoration: underline;
 }
