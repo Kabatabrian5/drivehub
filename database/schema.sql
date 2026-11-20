@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS vehicles (
     condition TEXT NOT NULL DEFAULT '',
     location TEXT NOT NULL DEFAULT 'Kenya',
     description TEXT NOT NULL DEFAULT '',
+    specifications JSONB NOT NULL DEFAULT '{}'::jsonb
+        CHECK (jsonb_typeof(specifications) = 'object'),
     images JSONB NOT NULL DEFAULT '[]'::jsonb
         CHECK (jsonb_typeof(images) = 'array'),
     tiktok_url TEXT,
@@ -22,6 +24,9 @@ CREATE TABLE IF NOT EXISTS vehicles (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE vehicles
+    ADD COLUMN IF NOT EXISTS specifications JSONB NOT NULL DEFAULT '{}'::jsonb;
 
 CREATE INDEX IF NOT EXISTS vehicles_public_created_idx
     ON vehicles (status, created_at DESC);

@@ -8,7 +8,7 @@ module.exports = defineConfig({
     plugins: [{
         name: "copy-classic-app-scripts",
         generateBundle() {
-            for (const fileName of ["script.js", "admin.js"]) {
+            for (const fileName of ["script.js"]) {
                 this.emitFile({
                     type: "asset",
                     fileName,

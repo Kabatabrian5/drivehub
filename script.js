@@ -605,6 +605,18 @@ function renderDetails() {
 
     const images = carImages(car);
     const tiktokVideoUrl = getTikTokVideoUrl(car.tiktokUrl);
+    const specificationLabels = {
+        seats: "Seats",
+        doors: "Doors",
+        colour: "Colour",
+        registration: "Registration",
+        serviceHistory: "Service history",
+        bodyType: "Body type",
+        drivetrain: "Drivetrain"
+    };
+    const extraSpecifications = Object.entries(car.specifications || {})
+        .filter(([key, value]) => specificationLabels[key] && value)
+        .map(([key, value]) => [specificationLabels[key], value]);
 
     content.innerHTML = `
         <h2>${escapeHTML(car.make)} ${escapeHTML(car.model)}</h2>
@@ -630,7 +642,8 @@ function renderDetails() {
                 ["Fuel", car.fuel || "N/A"],
                 ["Transmission", car.transmission || "N/A"],
                 ["Condition", car.condition || "N/A"],
-                ["Location", car.location || "Kenya"]
+                ["Location", car.location || "Kenya"],
+                ...extraSpecifications
             ].map(([label, value]) => `
                 <div class="spec-item">
                     <small>${label}</small>

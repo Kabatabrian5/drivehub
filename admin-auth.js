@@ -1,4 +1,5 @@
 import { createClient } from "@neon/neon-js";
+import "./admin-vehicles.js";
 
 const gate = document.getElementById("adminAuthGate");
 const message = document.getElementById("adminAuthMessage");
@@ -60,6 +61,11 @@ function normalizeVehicle(row) {
         condition: row.condition || "",
         location: row.location || "Kenya",
         description: row.description || "",
+        specifications: row.specifications &&
+            typeof row.specifications === "object" &&
+            !Array.isArray(row.specifications)
+            ? row.specifications
+            : {},
         images: Array.isArray(row.images) ? row.images : [],
         tiktokUrl: row.tiktok_url || "",
         phone: row.phone || "",
@@ -85,6 +91,7 @@ function databaseVehicle(vehicle) {
         condition: vehicle.condition || "",
         location: vehicle.location || "Kenya",
         description: vehicle.description || "",
+        specifications: vehicle.specifications || {},
         images: vehicle.images || [],
         tiktok_url: vehicle.tiktokUrl || null,
         phone: vehicle.phone || null,

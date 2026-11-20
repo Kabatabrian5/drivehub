@@ -31,6 +31,7 @@ module.exports = async function handler(req, res) {
                 condition,
                 location,
                 description,
+                specifications,
                 images,
                 tiktok_url AS "tiktokUrl",
                 phone,
