@@ -15,6 +15,7 @@ let cachedVehicles = null;
 let authenticated = false;
 
 function showGate(text, showForm) {
+    gate.hidden = false;
     document.body.classList.add("admin-auth-pending");
     message.textContent = text;
     form.hidden = !showForm;
@@ -202,6 +203,7 @@ async function enterDashboard(user) {
     authenticated = true;
     window.setAdminVehicles(vehicles);
     document.body.classList.remove("admin-auth-pending");
+    gate.hidden = true;
     message.textContent = `Signed in as ${user.email}.`;
     form.hidden = true;
     signOutButton.hidden = false;

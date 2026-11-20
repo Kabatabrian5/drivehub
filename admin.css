@@ -285,6 +285,10 @@ body.admin-auth-pending > .toast {
     var(--bg);
 }
 
+.admin-auth-gate[hidden] {
+  display: none;
+}
+
 .admin-auth-card {
   width: min(100%, 410px);
   padding: 30px;
