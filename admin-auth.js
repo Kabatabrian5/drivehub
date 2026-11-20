@@ -67,6 +67,7 @@ function normalizeVehicle(row) {
             ? row.specifications
             : {},
         images: Array.isArray(row.images) ? row.images : [],
+        imagePublicIds: Array.isArray(row.image_public_ids) ? row.image_public_ids : [],
         tiktokUrl: row.tiktok_url || "",
         phone: row.phone || "",
         dealerId: row.dealer_id || null,
@@ -93,6 +94,7 @@ function databaseVehicle(vehicle) {
         description: vehicle.description || "",
         specifications: vehicle.specifications || {},
         images: vehicle.images || [],
+        image_public_ids: vehicle.imagePublicIds || [],
         tiktok_url: vehicle.tiktokUrl || null,
         phone: vehicle.phone || null,
         dealer_id: vehicle.dealerId || null,
@@ -351,6 +353,13 @@ signOutButton.addEventListener("click", handleSignOut);
 
 window.driveHubDatabase = {
     isEnabled: () => Boolean(client && authenticated),
+    getAccessToken: async () => {
+        const { data, error } = await client.auth.getSession();
+        if (error) {
+            throw new Error(errorText(error, "Could not verify your admin session."));
+        }
+        return data?.session?.token || null;
+    },
     getCachedVehicles: () => cachedVehicles,
     setCachedVehicles: vehicles => {
         cachedVehicles = Array.isArray(vehicles) ? vehicles : [];

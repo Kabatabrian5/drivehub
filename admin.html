@@ -187,12 +187,16 @@
             placeholder="Optional features and additional details"></textarea>
         </label>
 
-        <label class="full-field">Vehicle image URLs
-          <textarea id="vehicleImages" rows="3"
-            placeholder="Paste HTTPS image links, one per line (up to 8)"></textarea>
-          <span class="field-help">Use hosted image links. Number plates should be redacted before publishing.</span>
+        <label class="full-field">Vehicle photos
+          <input id="vehicleImages" type="file"
+            accept="image/jpeg,image/png,image/webp" multiple>
+          <span class="field-help">
+            Choose up to 8 photos. For each visible plate, drag over the last 3 characters
+            to apply an opaque DRIVE HUB mask, or mark that no plate is visible.
+            Photos are masked in this browser before they are uploaded to Cloudinary.
+          </span>
         </label>
-        <div class="image-preview" id="vehicleImagePreview"></div>
+        <div class="image-review" id="vehicleImageReview"></div>
 
         <details class="optional-fields">
           <summary>Optional contact and video review</summary>

@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS vehicles (
         CHECK (jsonb_typeof(specifications) = 'object'),
     images JSONB NOT NULL DEFAULT '[]'::jsonb
         CHECK (jsonb_typeof(images) = 'array'),
+    image_public_ids JSONB NOT NULL DEFAULT '[]'::jsonb
+        CHECK (jsonb_typeof(image_public_ids) = 'array'),
     tiktok_url TEXT,
     phone TEXT,
     dealer_id TEXT,
@@ -27,6 +29,9 @@ CREATE TABLE IF NOT EXISTS vehicles (
 
 ALTER TABLE vehicles
     ADD COLUMN IF NOT EXISTS specifications JSONB NOT NULL DEFAULT '{}'::jsonb;
+
+ALTER TABLE vehicles
+    ADD COLUMN IF NOT EXISTS image_public_ids JSONB NOT NULL DEFAULT '[]'::jsonb;
 
 CREATE INDEX IF NOT EXISTS vehicles_public_created_idx
     ON vehicles (status, created_at DESC);

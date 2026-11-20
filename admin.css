@@ -290,19 +290,95 @@ button {
   line-height: 1.5;
 }
 
-.image-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 12px;
+.image-review {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
 }
 
-.image-preview img {
-  width: 76px;
-  height: 58px;
-  object-fit: cover;
+.image-review-card {
+  min-width: 0;
+  overflow: hidden;
+  background: #f7f8fa;
   border: 1px solid var(--admin-line);
+  border-radius: 8px;
+}
+
+.image-review-heading,
+.image-review-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.image-review-heading {
+  color: var(--admin-ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.image-review-heading span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-review-canvas-wrap {
+  padding: 0 10px;
+}
+
+.image-review-canvas {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: #e8ebf0;
   border-radius: 5px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.existing-photo-preview {
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  background: #e8ebf0;
+}
+
+.image-review-controls {
+  flex-wrap: wrap;
+  color: var(--admin-muted);
+  font-size: 11px;
+}
+
+.image-review-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.image-review-controls input {
+  width: 16px;
+  height: 16px;
+}
+
+.image-review-remove {
+  padding: 5px 8px;
+  color: #a22;
+  background: #fff;
+  border: 1px solid #e6bcbc;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.image-mask-status {
+  width: 100%;
+  color: #56657a;
 }
 
 .optional-fields {
@@ -392,6 +468,14 @@ button {
   object-fit: cover;
   background: rgba(255, 255, 255, .08);
   border-radius: 5px;
+}
+
+.vehicle-thumb-empty {
+  display: grid;
+  place-items: center;
+  color: #d7e1ed;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .vehicle-name {
@@ -521,6 +605,10 @@ button {
   .vehicle-form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 13px 10px;
+  }
+
+  .image-review {
+    grid-template-columns: 1fr;
   }
 
   .inventory-list {
